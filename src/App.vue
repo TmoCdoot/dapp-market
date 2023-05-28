@@ -20,10 +20,8 @@
     </div>
 
     <div class="nav_link">
-      <router-link to="/profil" class="a_link" v-on:click="page == profil">
-        <img src="../src/assets/profil-test.png" alt="">
-      </router-link>
-      <router-link to="/param" class="a_link" @click="test">
+      <img src="../src/assets/user.png" alt="" class="img_connect_wallet" @click="tryConnect">
+      <router-link to="/param" class="a_link">
         <img src="../src/assets/parametres.png" alt="">
       </router-link>
     </div>
@@ -33,17 +31,30 @@
 </template>
 
 <script>
+import { useOnboard } from '@web3-onboard/vue'
+
 export default {
+  setup() {
+        const { connectWallet, alreadyConnectedWallets } = useOnboard()
+
+        const connect = async () => connectWallet()
+
+        return { connect, alreadyConnectedWallets}
+  },
   data: function () {
       return {
         page: ""
       }
-    },
-    methods: {
-      test: function () {
-        console.log("bite")
+  },
+  methods: {
+    tryConnect: function () {
+      if (this.alreadyConnectedWallets.length != 0 ) {
+        this.$router.push('profil')
+      } else {
+        this.connect()
       }
     }
+  }
 }
 </script>
 
@@ -105,5 +116,15 @@ nav img {
   padding: 12px;
   display: flex;
   margin-bottom: 10px;
+}
+
+.img_connect_wallet {
+  background: #FEFEFE;
+    box-shadow: 0px 3px 11px 1px rgb(0 0 0 / 25%);
+    border-radius: 15px;
+    padding: 12px;
+    display: flex;
+    margin-bottom: 10px;
+    cursor: pointer;
 }
 </style>
