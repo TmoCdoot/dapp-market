@@ -8,7 +8,7 @@ export default createStore({
   getters: {
   },
   mutations: {
-    setdata: function (state, data) {
+    setSellItem: function (state, data) {
       data.forEach(element => {
         element.product_sell_metadata = JSON.parse(element.product_sell_metadata)
       });
@@ -18,7 +18,7 @@ export default createStore({
   actions: {
     getSellItem: ({ commit }) => {
       axios.get('http://localhost:8888/test/').then(function (response) { 
-        commit('setdata', response.data)
+        commit('setSellItem', response.data)
       })}
   },
   modules: {
