@@ -1,5 +1,10 @@
 <template>
-  like
+  <div class="main_block">
+    <TopBlockComponent title="Article save" subtitle="Item you like"/>
+    <div class="middle_top_block">
+      <ItemSaleComponent title="Tiny house" location="Seatle, Nevada" price_crypto="156,45 Eth" price_fiat="156.486,99 $" type="sale"/>
+    </div>
+  </div>
 </template>
 
 <script>

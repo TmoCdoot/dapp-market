@@ -1,5 +1,24 @@
 <template>
-    conv
+    <div class="conversation to" v-if="isType == 'to'">
+        <div class="conversation_message_to">
+            <span>{{ message }} </span>
+            <img src="../assets/verifier.png" alt="" v-if="isOpen == 'true'">
+            <img src="../assets/verifie-no-view.png" alt="" v-else-if="isSend == 'true' && isOpen == 'false'">
+            <img src="" alt="" v-else-if="isSend == 'false' || isOpen == 'false'">
+        </div>
+        
+        <img src="../assets/profil-test.png" alt="">
+    </div>
+    <div class="conversation from" v-else>
+        <img src="../assets/profil-test.png" alt="">
+        <div class="conversation_message_from">
+            <span>{{ message }} </span>
+            <img src="../assets/verifier.png" alt="" v-if="isOpen == 'true'">
+            <img src="../assets/verifie-no-view.png" alt="" v-else-if="isSend == 'true' || isOpen == 'false'">
+            <img src="" alt="" v-else-if="isSend == 'false' || isOpen == 'false'">
+           
+        </div>
+    </div>
 </template>
 
 <script>
