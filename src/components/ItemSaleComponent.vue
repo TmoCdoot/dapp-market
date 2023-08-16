@@ -7,12 +7,12 @@
               {{ title }}
               <img src="../assets/like.png" alt="">
             </span>
-            <span class="item_location">{{ location }}</span>
+            <span class="item_location">{{ city }}, {{ county }}</span>
           </div>
           <div class="item_price_box">
             <div>
               <span class="item_price_crypto">{{ price_crypto }}</span>
-              <span class="item_price_fiat">{{ price_fiat }}</span>
+              <span class="item_price_fiat">32.232 €</span>
             </div>
             <img src="../assets/ETH.png" alt="">
           </div>
@@ -29,11 +29,11 @@
 <script>
   export default {
     props : {
-      type: String,
+      metadata: Object,
       title: String,
-      location : String,
+      city : String,
+      county: String,
       price_crypto: String,
-      price_fiat: String,
     },
     data: function () {
       return {
@@ -49,6 +49,7 @@
     box-shadow: 0px 1px 9px 0px rgb(0 0 0 / 25%);
     border-radius: 20px;
     margin-right: 20px;
+    height: fit-content;
   }
   .item_top_block {
     margin: 20px 20px 0px 20px;

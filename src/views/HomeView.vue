@@ -1,71 +1,25 @@
 <template>
- <div class="main_block">
-  <TopBlockComponent title="Last sales" subtitle="Tracking lastr add's on shop"/>
-  <div class="middle_top_block">
-    <ItemSaleComponent title="Tiny house" location="Seatle, Nevada" price_crypto="156,45 Eth" price_fiat="156.486,99 $" type="sale"/>
-  </div>
-  <div class="middle_bottom_block">
-    <span class="title_big">Find your object</span>
-    <div class="search_block">
-      <div>
-        <span>
-          Category
-          <img src="../assets/down-arrow.png" alt="">
-        </span>
-      </div>
-      <div>
-        <span>
-          Location
-          <img src="../assets/down-arrow.png" alt="">
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="bottom_block">
-    <div>
-      <span>
-        <img src="../assets/logo_test.png" alt=""> 
-        D_Market
-      </span>
-      <p>It was popularised in the 1960s with <br>
-        the release of Letraset sheets containing <br>
-        Lorem Ipsum passages, and more recently with desktop <br>
-        publishing software like Aldus PageMaker including <br>
-        versions of Lorem Ipsum.</p>
-    </div>
-    <span class="contact_button">Contact Us</span>
-    <div class="info_block">
-      <div>
-        <ul>
-          <li class="list_name">Company</li>
-          <li>Sell rules</li>
-          <li>Buyer protection</li>
-          <li>Litige service</li>
-          <li>Whitepaper</li>
-        </ul>
-      </div>
-      <div>
-        <ul>
-          <li class="list_name">Service</li>
-          <li>Last news</li>
-          <li>Release details</li>
-        </ul>
-      </div>
-    </div>
-  </div>
- </div>
+    <ItemSaleComponent v-for="value in data" :key="value" 
+      :title="value.product_sell_title" :city="value.product_sell_city" :county="value.product_sell_county" :price_crypto="value.product_sell_price" :metadata="value.product_sell_metadata"/>
 </template>
 
 <script>
 import TopBlockComponent from '../components/TopBlockComponent.vue'
 import ItemSaleComponent from '../components/ItemSaleComponent.vue'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     TopBlockComponent,
     ItemSaleComponent
   },
+  computed: {
+      ...mapState(['data']),
+    },
   name: 'HomeView',
+  beforeMount() {
+    this.$store.dispatch('getSellItem')
+  }
 }
 </script>
 

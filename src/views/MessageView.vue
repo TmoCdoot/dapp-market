@@ -1,38 +1,5 @@
 <template>
-  <div class="main_block">
-    <TopBlockComponent title="Message" subtitle="Conversations with sellers or buyers"/>
-    <div class="middle_top_block">
-      <div class="left_block">
-        <UserMessageComponent name="DD Michel" registerYear="2019" selected="true"/>
-        <UserMessageComponent name="Yohan D" registerYear="2019" selected="false"/>
-      </div>
-      <div class="right_block">
-        <div class="top_right_block">
-          <div class="message_block">
-            <ConversationComponent type="to" message="Hi, I contact you to find out if your house is still available?" send="true" open="true"/>
-            <ConversationComponent type="from" message="Hi, yes still available" send="true" open="true"/>
-            <ConversationComponent type="to" message="I would like to know if it would be possible to come and visit it?" send="true" open="false"/>
-            <ConversationComponent type="to" message="Does the house have work to do?" send="false" open="false"/>
-            <ConversationComponent type="from" message="Hi, yes still available" send="true" open="true"/>
-            <ConversationComponent type="to" message="I would like to know if it would be possible to come and visit it?" send="true" open="false"/>
-            <ConversationComponent type="to" message="Does the house have work to do?" send="false" open="false"/>
-            <ConversationComponent type="from" message="Hi, yes still available" send="true" open="true"/>
-            <ConversationComponent type="to" message="I would like to know if it would be possible to come and visit it?" send="true" open="false"/>
-            <ConversationComponent type="to" message="Does the house have work to do?" send="false" open="false"/>
-          </div>
-          <div class="conversation_send_message">
-            <span class="text_send">I want to eat our face ?</span>
-            <img src="../assets/trombone.png" alt="">
-            <span class="button_send">Send</span>
-          </div>
-          
-        </div>
-        <div class="bottom_right_block">
-          
-        </div>
-      </div>
-    </div>
-  </div>
+  conv
 </template>
 
 <script>
