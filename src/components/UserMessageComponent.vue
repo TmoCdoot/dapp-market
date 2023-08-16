@@ -1,15 +1,5 @@
 <template>
-    <div class="user_message" :class="{selected: selected == 'true'}">
-        <img src="../assets/user1.jpeg" alt="">
-        <div class="user_message_info">
-            <div class="user_message_name">
-                {{ name }}
-            </div>
-            <div class="user_message_register">
-                Registered {{ registerYear }}
-            </div>
-        </div>
-    </div>
+    dazd
 </template>
 
 <script>
