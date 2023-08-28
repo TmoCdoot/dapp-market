@@ -14,7 +14,9 @@
     "@web3-onboard/vue": "^2.7.3",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "jw-vue-pagination": "^1.0.3",
     "vue": "^3.2.13",
+    "vue-awesome-paginate": "^1.1.46",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },
