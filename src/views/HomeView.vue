@@ -3,8 +3,7 @@
     <input type="search" v-model="searchText" placeholder="recherche">
 
     <select v-model="searchFilter" required>
-      <option value="1">Immo</option>
-      <option value="2">informatique</option>
+      <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
     </select>
 
     <input type="text" v-model="searchPrixMin" placeholder="prix min">
@@ -16,8 +15,7 @@
     </select>
 
     <select v-model="searchBlockchain">
-      <option value="1">BTC</option>
-      <option value="2">ETH</option>
+      <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
     </select>
 
     <button @click="searchRequest">send</button>
@@ -38,13 +36,11 @@
       </select>
   
       <select v-model="addCategorie" required>
-        <option value="1">Immo</option>
-        <option value="2">informatique</option>
+        <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
       </select>
   
       <select v-model="addBlockchain" required>
-        <option value="1">BTC</option>
-        <option value="2">ETH</option>
+        <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
       </select>
   
       <button @click="addArticle">add article</button>
@@ -93,7 +89,7 @@
       ItemSaleComponent
     },
     computed: {
-      ...mapState(['sellProduct', 'departmentJson', 'produitCount']),
+      ...mapState(['sellProduct', 'departmentJson', 'produitCount', 'blockchainJson', 'categoryJson']),
     },
     methods: {
       searchRequest: function () {
@@ -105,7 +101,6 @@
           searchLocation: this.searchLocation,
           searchBlockchain: this.searchBlockchain,
         }).then((e) => {
-          console.log(this.$store.state.produitCount)
           if (this.$store.state.produitCount > 10) {
             this.pageNumber = 1
           }
@@ -145,12 +140,22 @@
           title_add_article: this.title_add_article,
           description_add_article: this.description_add_article,
           price_add_article: this.price_add_article,
+        }).then((e) => {
+          this.addLocation = ''
+          this.addCategorie = ''
+          this.addBlockchain =  ''
+          this.title_add_article = ''
+          this.description_add_article = ''
+          this.price_add_article= ""
         })
       }
     },
     name: 'HomeView',
     beforeMount() {
       this.$store.dispatch('getSellProductByLastAdd')
+      this.$store.dispatch('getDepartement')
+      this.$store.dispatch('getBlockchain') 
+      this.$store.dispatch('getCategory')
     }
   }
 </script>
