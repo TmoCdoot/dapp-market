@@ -2,8 +2,6 @@
   <router-view/>
 </template>
 
-
-
 <style>
 @font-face {
   font-family: Sofia;

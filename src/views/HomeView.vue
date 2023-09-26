@@ -48,6 +48,10 @@
     
   </div>
 
+  <div>
+    <button @click="tryConnect">Connect</button>
+  </div>
+
 
   <div class="grid-content">
     <ItemSaleComponent v-for="value in sellProduct" :key="value" :title="value.product_sell_title"
@@ -62,10 +66,17 @@
 </template>
 
 <script>
+  import { useOnboard } from '@web3-onboard/vue'
   import ItemSaleComponent from '../components/ItemSaleComponent.vue'
   import { mapState } from 'vuex'
 
   export default {
+    setup() {
+          const { connectWallet, alreadyConnectedWallets, wallets } = useOnboard()
+  
+          const connect = async () => connectWallet()
+          return { connect, alreadyConnectedWallets, wallets}
+    },
     data: function () {
       return {
         searchText: '',
@@ -92,6 +103,14 @@
       ...mapState(['sellProduct', 'departmentJson', 'produitCount', 'blockchainJson', 'categoryJson']),
     },
     methods: {
+      tryConnect: function () {
+        if (this.alreadyConnectedWallets.length != 0 ) {
+          //obtenir l'adresse du wallet
+          console.log(this.wallets[0].accounts[0].address)
+        } else {
+          this.connect()
+        }
+      },
       searchRequest: function () {
         this.$store.dispatch('getSellProductBySearch', {
           searchWord: this.searchText,
