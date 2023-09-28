@@ -3,6 +3,13 @@ import axios from 'axios';
 
 export default createStore({
   state: {
+    user : {
+      id: '',
+      key: '',
+      email: '',
+      name: '',
+      metadata: {},
+    },
     sellProduct: '',
     departmentJson: [],
     blockchainJson: [],
@@ -35,6 +42,13 @@ export default createStore({
     setCategory: function (state, response) {
       state.categoryJson = response
     },
+    setUserData: function (state, reponse) {
+      state.user.id = reponse.user_id
+      state.user.key = reponse.user_prvkey
+      state.user.email = reponse.user_mail
+      state.user.name = reponse.user_name
+      state.user.metadata = reponse.user_metadata
+    }
   },
   actions: {
     getDepartement: ({ commit }) => {
@@ -86,6 +100,7 @@ export default createStore({
         })
       })
     },
+
     changePage: ({commit, state}, value) => {
       return new Promise(Finish => {
         axios.post('http://localhost:8888/test/getBySearch.php/', {
@@ -122,6 +137,35 @@ export default createStore({
         })
       })
     },
+
+    checkUser: ({commit}, value) => {
+      return new Promise(Finish => {
+        axios.post('http://localhost:8888/test/getUser.php/', {
+          key: value['key'],
+        }).then((response) => {
+          if (response.data[0] != "empty") {
+            console.log(response.data[0])
+            commit('setUserData' , response.data[0])
+            Finish(true)
+          } else {
+            Finish(false)
+          }
+        })
+      })
+    },
+    createNewRegister: ({commit}, value) => {
+      return new Promise(Finish => {
+        axios.post('http://localhost:8888/test/addUser.php/', {
+          name: value['name'],
+          email: value['email'],
+          key: value['prvkey'],
+        }).then((e) => {
+          if (e.data = 1) {
+            Finish(true)
+          }
+        })
+      })
+    }
   },
   modules: {
   }

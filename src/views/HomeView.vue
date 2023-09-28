@@ -1,4 +1,16 @@
 <template>
+  <div class="registerModal" :style="{'display': [newAccount ? isActive : 'none']}">
+    <div>
+      <input type="text" v-model="registerName" placeholder="Your name">
+  
+      <input type="email" v-model="registerMail" placeholder="Your email"> 
+      
+      <button @click="newRegister">register</button>
+      <button @click="closeRegister"> close</button>
+    </div>
+  </div>
+  
+
   <div>
     <input type="search" v-model="searchText" placeholder="recherche">
 
@@ -49,7 +61,7 @@
   </div>
 
   <div>
-    <button @click="tryConnect">Connect</button>
+    <button @click="tryConnect">{{ statProfil }}</button>
   </div>
 
 
@@ -94,6 +106,12 @@
         description_add_article:'',
         price_add_article:'',
 
+        registerName: '',
+        registerMail: '',
+        newAccount: false,
+        isActive: "initial",
+        statProfil: 'Login / Register'
+
       }
     },
     components: {
@@ -104,11 +122,23 @@
     },
     methods: {
       tryConnect: function () {
+        //deja connecter
         if (this.alreadyConnectedWallets.length != 0 ) {
-          //obtenir l'adresse du wallet
-          console.log(this.wallets[0].accounts[0].address)
+          //obtenir l'adresse du wallet donc go page profil
+          console.log('deja co')
         } else {
-          this.connect()
+          this.connect().then(() => {
+            //modal qui permet à l'user de se crée un compte
+            this.$store.dispatch('checkUser', {key: this.wallets[0].accounts[0].address}).then((e) => {
+              if (e == false) {
+                //user pas de compte
+                this.newAccount = true
+              } else {
+                //user a un compte
+                this.statProfil = 'Profil'
+              }
+            })
+          })
         }
       },
       searchRequest: function () {
@@ -167,9 +197,38 @@
           this.description_add_article = ''
           this.price_add_article= ""
         })
-      }
+      },
+      closeRegister: function () {
+        this.newAccount = false
+      },
+      newRegister: function () {
+        this.$store.dispatch('createNewRegister', {
+          name: this.registerName,
+          email: this.registerMail,
+          prvkey: this.wallets[0].accounts[0].address 
+        }).then((e) => {
+          if (e) {
+            this.$store.dispatch('checkUser', {key: this.wallets[0].accounts[0].address}).then((e) => {
+              if (e == false) {
+                //erreur lors de l'inscription
+              } else {
+                this.newAccount = false
+                this.statProfil = 'Profil'
+              }
+            })
+            
+          }
+        })
+      },
+
     },
     name: 'HomeView',
+    created: function() {
+      if (localStorage.getItem('onboard.js:last_connected_wallet') != []) {
+        console.log("user connecter")
+        console.log(this.wallets)
+      }
+    },
     beforeMount() {
       this.$store.dispatch('getSellProductByLastAdd')
       this.$store.dispatch('getDepartement')
@@ -185,5 +244,22 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-gap: 15px;
+  }
+
+  .registerModal > div {
+    background-color: red;
+    position: absolute;
+    padding: 30px 20px;
+    left: 100px;
+    top: 200px;
+    display: flex;
+    flex-direction: column;
+  }
+  .registerModal {
+    position: absolute;
+    background-color: #1f1e1dd6;
+    width: 100%;
+    height: 100%;
+    display: none;
   }
 </style>
