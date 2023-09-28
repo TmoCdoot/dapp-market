@@ -14,10 +14,10 @@ const rpcUrl = `https://mainnet.infura.io/v3/${infuraKey}`
 //déclaration des modules de wallets
 
 const injected = injectedModule()
-const ledger = ledgerModule()
+
 
 const web3Onboard = init({
-  wallets: [injected, ledger],
+  wallets: [injected, ],
   chains: [
     {
       id: '0x1',
