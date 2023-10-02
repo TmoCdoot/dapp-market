@@ -4,12 +4,6 @@
           <span class="title_big">{{ title }}</span>
           <span class="subtitle">{{ subtitle }}</span>
         </div>
-        <div>
-          <span class="subtext_searchbar">
-            Book, music ?
-            <img src="../assets/search.png" alt="">
-          </span>
-        </div>
       </div>
 </template>
 

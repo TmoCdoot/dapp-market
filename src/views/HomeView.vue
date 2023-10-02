@@ -1,4 +1,75 @@
 <template>
+
+  <div class="main_block">
+    <TopBlockComponent title="Last sales" subtitle="Tracking lastr add's on shop"/>
+
+    <div class="grid-content">
+      <ItemSaleComponent v-for="value in sellProduct" :key="value" :title="value.product_sell_title"
+        :city="value.product_sell_city" :county="value.product_sell_county" :price_crypto="value.product_sell_price"
+        :metadata="value.product_sell_metadata" />
+    </div>
+
+    <div class="middle_bottom_block">
+      <span class="title_big">Find your object</span>
+      <div class="search_block">
+        <div>
+          <input type="search" v-model="searchText" placeholder="Livre, voiture ...">
+          <input type="text" v-model="searchPrixMin" placeholder="prix min">
+          <input type="text" v-model="searchPrixMax" placeholder="prix max">
+          <button @click="searchRequest" class="send_button">Rechercher</button>
+        </div>
+        <div>
+          <select v-model="searchFilter" required>
+            <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
+          </select>
+          <select v-model="searchLocation">
+            <option v-for="value in departmentJson" :value="value.departement_num">{{value.departement_num}} -
+              {{value.departement_region}}</option>
+          </select>
+          <select v-model="searchBlockchain">
+            <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
+          </select>
+        </div>
+      </div>
+    
+    </div>
+
+    <div class="bottom_block">
+      <div>
+        <span>
+          <img src="../assets/logo_test.png" alt=""> 
+          D_Market
+        </span>
+        <p>It was popularised in the 1960s with <br>
+          the release of Letraset sheets containing <br>
+          Lorem Ipsum passages, and more recently with desktop <br>
+          publishing software like Aldus PageMaker including <br>
+          versions of Lorem Ipsum.</p>
+      </div>
+      <span class="contact_button">Contact Us</span>
+      <div class="info_block">
+        <div>
+          <ul>
+            <li class="list_name">Company</li>
+            <li>Sell rules</li>
+            <li>Buyer protection</li>
+            <li>Litige service</li>
+            <li>Whitepaper</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li class="list_name">Service</li>
+            <li>Last news</li>
+            <li>Release details</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- modal pour s'inscire sur lme site -->
   <div class="registerModal" :style="{'display': [newAccount ? isActive : 'none']}">
     <div>
       <input type="text" v-model="registerName" placeholder="Your name">
@@ -10,31 +81,31 @@
     </div>
   </div>
   
+  <!-- filtre des recherche -->
+<!--   <div> -->
+    <!-- <input type="search" v-model="searchText" placeholder="recherche"> -->
 
-  <div>
-    <input type="search" v-model="searchText" placeholder="recherche">
-
-    <select v-model="searchFilter" required>
+    <!-- <select v-model="searchFilter" required>
       <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
-    </select>
+    </select> -->
 
-    <input type="text" v-model="searchPrixMin" placeholder="prix min">
-    <input type="text" v-model="searchPrixMax" placeholder="prix max">
+    <!-- <input type="text" v-model="searchPrixMin" placeholder="prix min">
+    <input type="text" v-model="searchPrixMax" placeholder="prix max"> -->
 
-    <select v-model="searchLocation">
+    <!-- <select v-model="searchLocation">
       <option v-for="value in departmentJson" :value="value.departement_num">{{value.departement_num}} -
         {{value.departement_region}}</option>
     </select>
 
     <select v-model="searchBlockchain">
       <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
-    </select>
+    </select> -->
 
-    <button @click="searchRequest">send</button>
-  </div>
+    <!-- <button @click="searchRequest">send</button> -->
+  <!-- </div> -->
 
-  *********** ADD ARTICLE********
-  <div>
+ <!--   ajout article-->
+  <!-- <div>
     <form>
       <input type="text" placeholder="title"  v-model="title_add_article" required>
 
@@ -58,29 +129,20 @@
       <button @click="addArticle">add article</button>
     </form>
     
-  </div>
+  </div> -->
+  
 
-  <div>
-    <button @click="tryConnect">{{ statProfil }}</button>
-    <button v-if="statProfil == 'Profil'" @click="disconnectConnectedWallet(); disconnect();">Disconnect</button>
-  </div>
-
-
-  <div class="grid-content">
-    <ItemSaleComponent v-for="value in sellProduct" :key="value" :title="value.product_sell_title"
-      :city="value.product_sell_city" :county="value.product_sell_county" :price_crypto="value.product_sell_price"
-      :metadata="value.product_sell_metadata" />
-  </div>
-
-  <div v-if="produitCount > 10">
+  <!-- pagination -->
+  <!-- <div v-if="produitCount > 10">
     <button @click="nextPage">Next page</button>
     <button @click="previousPage">Previous page</button>
-  </div>
+  </div> -->
 </template>
 
 <script>
   import { useOnboard } from '@web3-onboard/vue'
   import ItemSaleComponent from '../components/ItemSaleComponent.vue'
+  import TopBlockComponent from '../components/TopBlockComponent.vue'
   import { mapState } from 'vuex'
 
   export default {
@@ -90,6 +152,7 @@
           const connect = async () => connectWallet()
           return { connect, alreadyConnectedWallets, wallets, disconnectConnectedWallet}
     },
+    name: 'HomeView',
     data: function () {
       return {
         searchText: '',
@@ -111,38 +174,17 @@
         registerMail: '',
         newAccount: false,
         isActive: "initial",
-        statProfil: 'Login / Register'
 
       }
     },
     components: {
-      ItemSaleComponent
+      ItemSaleComponent,
+      TopBlockComponent
     },
     computed: {
       ...mapState(['sellProduct', 'departmentJson', 'produitCount', 'blockchainJson', 'categoryJson']),
     },
     methods: {
-      tryConnect: function () {
-        //deja connecter
-        if (this.alreadyConnectedWallets.length != 0 ) {
-          //obtenir l'adresse du wallet donc go page profil
-          console.log('deja co')
-          console.log(this.$store.state.user)
-        } else {
-          this.connect().then(() => {
-            //modal qui permet à l'user de se crée un compte
-            this.$store.dispatch('checkUser', {key: this.wallets[0].accounts[0].address}).then((e) => {
-              if (e == false) {
-                //user pas de compte
-                this.newAccount = true
-              } else {
-                //user a un compte
-                this.statProfil = 'Profil'
-              }
-            })
-          })
-        }
-      },
       searchRequest: function () {
         this.$store.dispatch('getSellProductBySearch', {
           searchWord: this.searchText,
@@ -183,23 +225,6 @@
           })
         }
       },
-      addArticle: function () {
-        this.$store.dispatch('addArticle', {
-          addLocation: this.addLocation,
-          addCategorie: this.addCategorie,
-          addBlockchain: this.addBlockchain,
-          title_add_article: this.title_add_article,
-          description_add_article: this.description_add_article,
-          price_add_article: this.price_add_article,
-        }).then((e) => {
-          this.addLocation = ''
-          this.addCategorie = ''
-          this.addBlockchain =  ''
-          this.title_add_article = ''
-          this.description_add_article = ''
-          this.price_add_article= ""
-        })
-      },
       closeRegister: function () {
         this.newAccount = false
       },
@@ -222,17 +247,9 @@
           }
         })
       },
-      disconnect: function () {
-        this.statProfil = 'Login / Register'
-        this.$store.state.user.id = ''
-        this.$store.state.user.key = ''
-        this.$store.state.user.email = ''
-        this.$store.state.user.name = ''
-        this.$store.state.user.metadata = {}
-      },
 
     },
-    name: 'HomeView',
+
     created: function() {
       if (localStorage.getItem('onboard.js:last_connected_wallet') != '[]') {
         console.log("user connecter")
@@ -252,9 +269,10 @@
 <style>
   .grid-content {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(250px, 1fr));
     grid-gap: 15px;
+    justify-items: center;
   }
 
   .registerModal > div {
@@ -272,5 +290,144 @@
     width: 100%;
     height: 100%;
     display: none;
+  }
+
+  .main_block {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    width: -webkit-fill-available;
+    margin: 10px;
+  }
+
+  .middle_top_block {
+    display: flex;
+    flex-direction: row;
+    /* border: 1px solid green; */
+    margin: 30px 30px;
+  }
+
+  .middle_bottom_block {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 30px;
+    border: 2px solid #F2F2F2;
+    border-radius: 30px;
+    padding: 15px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .middle_bottom_block > div span {
+    background: #EEF0F4;
+    border-radius: 20px;
+    padding: 10px 15px;
+    width: 250px;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+    color: #a1a1a1;
+    display: flex;
+    justify-content: space-between;
+  }
+  .middle_bottom_block > div img {
+    width: 15px;
+  }
+  .search_block {
+    display: flex;
+    flex-direction: column;
+    width: -webkit-fill-available;
+  }
+  .search_block div {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .search_block select {
+    background: #EEF0F4;
+    border-radius: 20px;
+    padding: 10px 15px;
+    width: 250px;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12px;
+    color: #000000;
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    margin-inline: 5px;
+  }
+  .search_block input {
+    background: #EEF0F4;
+    border-radius: 20px;
+    padding: 10px 15px;
+    width: 220px;
+    font-weight: 400;
+    border: none;
+    font-style: italic;
+    font-size: 12px;
+    color: #000000;
+    display: flex;
+    margin: 5px;
+    justify-content: space-between;
+  }
+
+  .bottom_block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px 30px;
+    border: 2px solid #F2F2F2;
+    border-radius: 30px;
+    padding: 15px;
+    justify-content: space-between;
+  }
+  .bottom_block p {
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .bottom_block span {
+    font-weight: 700;
+    display: flex;
+    font-size: 17px;
+    align-items: center;
+  }
+  .bottom_block div span img {
+    width: 25px;
+    margin-right: 10px;
+  }
+  .contact_button {
+    font-weight: 300 !important;
+    font-size: 16px !important;
+    background: #3966F6;
+    border-radius: 20px;
+    padding: 8px 30px;
+    color: #ffffff;
+  }
+  .send_button {
+    height: 35px;
+    font-weight: 300 !important;
+    font-size: 16px !important;
+    background: #3966F6;
+    border-radius: 20px;
+    padding: 8px 30px;
+    color: #ffffff;
+    border: none;
+    font-family: Sofia, SofiaItalic, Helvetica, Arial, sans-serif;
+  }
+  .bottom_block li {
+    font-weight: 300;
+    font-size: 14px;
+    color: #878787;
+    margin: 3px;
+  }
+  .bottom_block ul {
+    list-style: none;
+    margin: 0;
+  }
+  .list_name {
+    font-weight: 700 !important;
+    font-size: 17px !important;
+    color: #000000 !important;
+  }
+  .info_block {
+    display: flex;
   }
 </style>

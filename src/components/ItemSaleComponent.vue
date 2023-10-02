@@ -50,6 +50,7 @@
     border-radius: 20px;
     margin-right: 20px;
     height: fit-content;
+    width: fit-content;
   }
   .item_top_block {
     margin: 20px 20px 0px 20px;

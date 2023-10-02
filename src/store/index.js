@@ -9,6 +9,7 @@ export default createStore({
       email: '',
       name: '',
       metadata: {},
+      statutLogin: false
     },
     sellProduct: '',
     departmentJson: [],
