@@ -144,7 +144,6 @@ export default createStore({
           key: value['key'],
         }).then((response) => {
           if (response.data[0] != "empty") {
-            console.log(response.data[0])
             commit('setUserData' , response.data[0])
             Finish(true)
           } else {

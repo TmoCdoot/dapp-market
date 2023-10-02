@@ -62,6 +62,7 @@
 
   <div>
     <button @click="tryConnect">{{ statProfil }}</button>
+    <button v-if="statProfil == 'Profil'" @click="disconnectConnectedWallet(); disconnect();">Disconnect</button>
   </div>
 
 
@@ -84,10 +85,10 @@
 
   export default {
     setup() {
-          const { connectWallet, alreadyConnectedWallets, wallets } = useOnboard()
+          const { connectWallet, alreadyConnectedWallets, wallets, disconnectConnectedWallet } = useOnboard()
   
           const connect = async () => connectWallet()
-          return { connect, alreadyConnectedWallets, wallets}
+          return { connect, alreadyConnectedWallets, wallets, disconnectConnectedWallet}
     },
     data: function () {
       return {
@@ -126,6 +127,7 @@
         if (this.alreadyConnectedWallets.length != 0 ) {
           //obtenir l'adresse du wallet donc go page profil
           console.log('deja co')
+          console.log(this.$store.state.user)
         } else {
           this.connect().then(() => {
             //modal qui permet à l'user de se crée un compte
@@ -220,12 +222,21 @@
           }
         })
       },
+      disconnect: function () {
+        this.statProfil = 'Login / Register'
+        this.$store.state.user.id = ''
+        this.$store.state.user.key = ''
+        this.$store.state.user.email = ''
+        this.$store.state.user.name = ''
+        this.$store.state.user.metadata = {}
+      },
 
     },
     name: 'HomeView',
     created: function() {
-      if (localStorage.getItem('onboard.js:last_connected_wallet') != []) {
+      if (localStorage.getItem('onboard.js:last_connected_wallet') != '[]') {
         console.log("user connecter")
+        this.statProfil = 'Profil'
         console.log(this.wallets)
       }
     },
