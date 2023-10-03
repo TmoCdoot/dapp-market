@@ -29,6 +29,11 @@ export default createStore({
       state.sellProduct = response;
     },
     setSellProductCount: function (state, response) {
+      if (Number.isInteger(response.count / 10) == false) {
+
+        response.count = (Math.ceil(response.count / 10 )) * 10
+        console.log(response.count)
+      }
       state.produitCount = []
       state.produitCount = response.count  
       state.pagination = 1
@@ -114,7 +119,6 @@ export default createStore({
           pagination: state.pagination
         }).then(function (response) {
           if (response.data[0] != "empty") {
-            //console.log(response.data)
             commit('setSellProduct', response.data[0])
           } else {
             commit('setSellProduct', [])

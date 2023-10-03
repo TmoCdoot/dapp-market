@@ -3,14 +3,23 @@
   <div class="main_block">
     <TopBlockComponent title="Last sales" subtitle="Tracking lastr add's on shop"/>
 
-    <div class="grid-content">
-      <ItemSaleComponent v-for="value in sellProduct" :key="value" :title="value.product_sell_title"
+    <div class="middle_block">
+      <div class="grid-content">
+        <ItemSaleComponent v-for="value in sellProduct" :key="value" :title="value.product_sell_title"
         :city="value.product_sell_city" :county="value.product_sell_county" :price_crypto="value.product_sell_price"
         :metadata="value.product_sell_metadata" />
+      </div>
+      
+      <span v-if="sellProduct == ''" class="noArticle">Désolé nous n'avons trouver aucun résultat pour votre recherche :(</span>
+    </div> 
+
+    <div v-if="produitCount > 10" class="pagination_block">
+      <button @click="previousPage" :disabled="this.$store.state.pagination == 1" :class="[this.$store.state.pagination == 1 ? 'unActive' : 'buttonPage']">Previous page</button>
+      <button @click="nextPage" :disabled="this.$store.state.pagination == (Math.trunc(this.$store.state.produitCount / 10))" :class="[this.$store.state.pagination == (Math.trunc(this.$store.state.produitCount / 10)) ? 'unActive' : 'buttonPage']">Next page</button>
     </div>
 
     <div class="middle_bottom_block">
-      <span class="title_big">Find your object</span>
+      <span class="title_big">Dénicher votre futur objet</span>
       <div class="search_block">
         <div>
           <input type="search" v-model="searchText" placeholder="Livre, voiture ...">
@@ -20,18 +29,20 @@
         </div>
         <div>
           <select v-model="searchFilter" required>
+            <option value="null" disabled hidden>Categorie</option>
             <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
           </select>
           <select v-model="searchLocation">
+            <option value="null" disabled hidden>Localisation</option>
             <option v-for="value in departmentJson" :value="value.departement_num">{{value.departement_num}} -
               {{value.departement_region}}</option>
           </select>
           <select v-model="searchBlockchain">
+            <option value="null" disabled hidden>Blockchain</option>
             <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
           </select>
         </div>
       </div>
-    
     </div>
 
     <div class="bottom_block">
@@ -79,64 +90,7 @@
       <button @click="newRegister">register</button>
       <button @click="closeRegister"> close</button>
     </div>
-  </div>
-  
-  <!-- filtre des recherche -->
-<!--   <div> -->
-    <!-- <input type="search" v-model="searchText" placeholder="recherche"> -->
-
-    <!-- <select v-model="searchFilter" required>
-      <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
-    </select> -->
-
-    <!-- <input type="text" v-model="searchPrixMin" placeholder="prix min">
-    <input type="text" v-model="searchPrixMax" placeholder="prix max"> -->
-
-    <!-- <select v-model="searchLocation">
-      <option v-for="value in departmentJson" :value="value.departement_num">{{value.departement_num}} -
-        {{value.departement_region}}</option>
-    </select>
-
-    <select v-model="searchBlockchain">
-      <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
-    </select> -->
-
-    <!-- <button @click="searchRequest">send</button> -->
-  <!-- </div> -->
-
- <!--   ajout article-->
-  <!-- <div>
-    <form>
-      <input type="text" placeholder="title"  v-model="title_add_article" required>
-
-      <input type="text" placeholder="description" v-model="description_add_article" required>
-  
-      <input type="number" placeholder="price" v-model="price_add_article" required>
-  
-      <select v-model="addLocation" required>
-        <option v-for="value in departmentJson" :value="value.departement_num">{{value.departement_num}} -
-          {{value.departement_region}}</option>
-      </select>
-  
-      <select v-model="addCategorie" required>
-        <option v-for="value in categoryJson" :value="value.category_id">{{value.category_title}}</option>
-      </select>
-  
-      <select v-model="addBlockchain" required>
-        <option v-for="value in blockchainJson" :value="value.blockchain_id">{{value.blockchain_name}}</option>
-      </select>
-  
-      <button @click="addArticle">add article</button>
-    </form>
-    
-  </div> -->
-  
-
-  <!-- pagination -->
-  <!-- <div v-if="produitCount > 10">
-    <button @click="nextPage">Next page</button>
-    <button @click="previousPage">Previous page</button>
-  </div> -->
+  </div>  
 </template>
 
 <script>
@@ -158,9 +112,9 @@
         searchText: '',
         searchPrixMin: '',
         searchPrixMax: '',
-        searchFilter: '',
-        searchLocation: '',
-        searchBlockchain: '',
+        searchFilter: 'null',
+        searchLocation: 'null',
+        searchBlockchain: 'null',
 
         pageNumber: '0',
         addLocation: '',
@@ -188,11 +142,11 @@
       searchRequest: function () {
         this.$store.dispatch('getSellProductBySearch', {
           searchWord: this.searchText,
-          category: this.searchFilter,
+          category: this.searchFilter == 'null' ? '' : this.searchFilter,
           priceMin: this.searchPrixMin,
           priceMax: this.searchPrixMax,
-          searchLocation: this.searchLocation,
-          searchBlockchain: this.searchBlockchain,
+          searchLocation: this.searchLocation == 'null' ? '' : this.searchLocation,
+          searchBlockchain: this.searchBlockchain == 'null' ? '' : this.searchBlockchain,
         }).then((e) => {
           if (this.$store.state.produitCount > 10) {
             this.pageNumber = 1
@@ -200,15 +154,15 @@
         })
       },
       nextPage: function () {
-        if (this.$store.state.pagination <= (Math.trunc(this.$store.state.produitCount / 10))) {
+        if (this.$store.state.pagination < (Math.trunc(this.$store.state.produitCount / 10))) {
           this.$store.state.pagination++
           this.$store.dispatch('changePage', {
             searchWord: this.searchText,
-            category: this.searchFilter == 'categorie' ? '' : this.searchFilter,
+            category: this.searchFilter == 'null' ? '' : this.searchFilter,
             priceMin: this.searchPrixMin,
             priceMax: this.searchPrixMax,
-            searchLocation: this.searchLocation == 'Département' ? '' : this.searchLocation,
-            searchBlockchain: this.searchBlockchain == 'blockchain' ? '' : this.searchBlockchain,
+            searchLocation: this.searchLocation == 'null' ? '' : this.searchLocation,
+            searchBlockchain: this.searchBlockchain == 'null' ? '' : this.searchBlockchain,
           })
         }
       },
@@ -217,11 +171,11 @@
           this.$store.state.pagination--
           this.$store.dispatch('changePage', {
             searchWord: this.searchText,
-            category: this.searchFilter == 'categorie' ? '' : this.searchFilter,
+            category: this.searchFilter == 'null' ? '' : this.searchFilter,
             priceMin: this.searchPrixMin,
             priceMax: this.searchPrixMax,
-            searchLocation: this.searchLocation == 'Département' ? '' : this.searchLocation,
-            searchBlockchain: this.searchBlockchain == 'blockchain' ? '' : this.searchBlockchain,
+            searchLocation: this.searchLocation == 'null' ? '' : this.searchLocation,
+            searchBlockchain: this.searchBlockchain == 'null' ? '' : this.searchBlockchain,
           })
         }
       },
@@ -429,5 +383,40 @@
   }
   .info_block {
     display: flex;
+  }
+
+  .unActive {
+    height: 35px;
+    font-size: 12px ;
+    background-color: #8ba4f3;
+    border-radius: 20px;
+    padding: 8px 20px;
+    color: #ffffff;
+    border: none;
+    font-family: Sofia, SofiaItalic, Helvetica, Arial, sans-serif;
+
+  }
+  .buttonPage {
+    height: 35px;
+    font-size: 12px ;
+    background-color: #3966f6;
+    border-radius: 20px;
+    padding: 8px 20px;
+    color: #ffffff;
+    border: none;
+    font-family: Sofia, SofiaItalic, Helvetica, Arial, sans-serif;
+    margin: 10px;
+    cursor: pointer;
+  }
+  .pagination_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .noArticle{
+    display: flex;
+    justify-content: center;
+    margin-block: 50px;
   }
 </style>

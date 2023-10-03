@@ -29,6 +29,7 @@ export default {
     font-weight: 800;
     font-size: 30px;
     margin-bottom: 5px;
+    width: 500px;
   }
   .subtitle {
     font-weight: 200;
